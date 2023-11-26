@@ -6,22 +6,31 @@
 \usage{
 bs_get_post_thread(
   uri,
+  depth = NULL,
+  parent_height = NULL,
   user = get_bluesky_user(),
   pass = get_bluesky_pass(),
-  auth = bs_auth(user, pass)
+  auth = bs_auth(user, pass),
+  clean = TRUE
 )
 }
 \arguments{
 \item{uri}{Character, length 1. URI for post to get.}
+
+\item{depth}{Integer. Maximum depth to request. Maximum: \code{1000}}
+
+\item{parent_height}{Integer. Maximum parent height to request.}
 
 \item{user}{Character. User name to log in with. Defaults to \code{get_bluesky_user()}.}
 
 \item{pass}{Character. App password to log in with. Defaults to \code{get_bluesky_pass()}.}
 
 \item{auth}{Authentication information. Defaults to \code{bs_auth(user, pass)}.}
+
+\item{clean}{Logical. Should output be cleaned into a \code{tibble}? Default: \code{TRUE}.}
 }
 \value{
-a tibble of posts
+a \link[tibble:tibble]{tibble::tibble} of posts
 }
 \description{
 Retrieve thread of posts

@@ -1,4 +1,5 @@
-# devtools
+# devtools ----
+# devtools not intended for use in production, not tested
 lrj <- function() { # nocov start
   httr2::last_response() |>
     httr2::resp_body_json()
@@ -8,7 +9,7 @@ lrj <- function() { # nocov start
   dplyr::glimpse(x)
 } # nocov end
 
-# general utils
+# general utils ----
 clean_names <- function(x) {
   out <- x |>
     names() |>
@@ -18,11 +19,12 @@ clean_names <- function(x) {
   stats::setNames(object = x, nm = out)
 }
 
-widen <- function(x) {
+
+widen <- function(x, i = 4) {
   x |>
     tibble::enframe() |>
     tidyr::pivot_wider() |>
-    tidyr::unnest_wider(col = where(~purrr::pluck_depth(.x) < 4), simplify = TRUE, names_sep = '_') |>
+    tidyr::unnest_wider(col = where(~purrr::pluck_depth(.x) < i), simplify = TRUE, names_sep = '_') |>
     dplyr::rename_with(.fn = function(x) substr(x, start = 1, stop = nchar(x) - 2), .cols = dplyr::ends_with('_1'))
 }
 
@@ -47,4 +49,30 @@ validate_pass <- function(x) {
     cli::cli_abort('{.arg pass} must be of the form {.val "xxxx-xxxx-xxxx-xxxx"}.')
   }
   invisible(x)
+}
+
+# reply helper ----
+get_reply_refs <- function(uri, auth) {
+
+  parent <- bs_get_record(repo = uri, auth = auth, clean = FALSE)
+
+  parent_reply <- parent$value$reply
+
+  if (!is.null(parent_reply)) {
+    cat(parent_reply$root$uri)
+    root <- bs_get_record(repo = parent_reply$root$uri, auth = auth, clean = FALSE)
+  } else {
+    root <- parent
+  }
+
+  list(
+    root = list(
+      uri = root$uri,
+      cid = root$cid
+    ),
+    parent = list(
+      uri = parent$uri,
+      cid = parent$cid
+    )
+  )
 }

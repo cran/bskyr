@@ -6,17 +6,18 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Codecov test
 coverage](https://codecov.io/gh/christopherkenny/bskyr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/christopherkenny/bskyr?branch=main)
+[![R-CMD-check](https://github.com/christopherkenny/bskyr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/christopherkenny/bskyr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-bskyr provides an interface to the Bluesky API, allowing you to interact
-with Bluesky Social from R. To do this, we provide functions which match
-with the [AT Protocol’s Lexicon](https://atproto.com/guides/lexicon),
-which is like using regular HTTP requests. Outputs from `bskyr`’s
-functions are primarily `tibble`s, allowing for easy analysis of the
-outputs from the API calls.
+`bskyr` provides an interface to the Bluesky API, allowing you to
+interact with Bluesky Social from R. To do this, we provide functions
+which match with the [AT Protocol’s
+Lexicon](https://atproto.com/guides/lexicon), which is like using
+regular HTTP requests. Outputs from `bskyr`’s functions are primarily
+`tibble`s, allowing for easy analysis of the outputs from the API calls.
 
 `bskyr` is currently under development. The first set of functions were
 focused on getting information. The second (and current) set of work is
@@ -55,12 +56,13 @@ then “Add App Password.”
 Once you have a password, you need to run:
 
 ``` r
-set_bluesky_user('yourhandle.bsky.social')
-set_bluesky_pass('the-app-password')
+set_bluesky_user('YOUR-USERNAME.bsky.social')
+set_bluesky_pass('your-apps-pass-word')
 ```
 
-If you want this to persist across sessions, set `install = TRUE`. This
-will save your credentials in your R environment file.
+If you want this to persist across sessions, set `install = TRUE` and
+`r_env = file.path(Sys.getenv('HOME'), '.Renviron')`. This will save
+your credentials in your R environment file.
 
 Alternatively, you can set them manually using
 `usethis::edit_r_environ()` and adding lines like so:

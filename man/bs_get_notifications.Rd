@@ -5,17 +5,23 @@
 \title{Get the user's (self) notifications}
 \usage{
 bs_get_notifications(
+  limit = NULL,
   user = get_bluesky_user(),
   pass = get_bluesky_pass(),
-  auth = bs_auth(user, pass)
+  auth = bs_auth(user, pass),
+  clean = TRUE
 )
 }
 \arguments{
+\item{limit}{Integer. Maximum number to request. Maximum: \code{100}}
+
 \item{user}{Character. User name to log in with. Defaults to \code{get_bluesky_user()}.}
 
 \item{pass}{Character. App password to log in with. Defaults to \code{get_bluesky_pass()}.}
 
 \item{auth}{Authentication information. Defaults to \code{bs_auth(user, pass)}.}
+
+\item{clean}{Logical. Should output be cleaned into a \code{tibble}? Default: \code{TRUE}.}
 }
 \value{
 a tibble with notifications

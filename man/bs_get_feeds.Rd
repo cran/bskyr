@@ -6,22 +6,28 @@
 \usage{
 bs_get_feeds(
   actor,
+  limit = NULL,
   user = get_bluesky_user(),
   pass = get_bluesky_pass(),
-  auth = bs_auth(user, pass)
+  auth = bs_auth(user, pass),
+  clean = TRUE
 )
 }
 \arguments{
 \item{actor}{Character, length 1. name of 1 actor, such as \code{'chriskenny.bsky.social'}}
+
+\item{limit}{Integer. Maximum number to request. Maximum: \code{100}}
 
 \item{user}{Character. User name to log in with. Defaults to \code{get_bluesky_user()}.}
 
 \item{pass}{Character. App password to log in with. Defaults to \code{get_bluesky_pass()}.}
 
 \item{auth}{Authentication information. Defaults to \code{bs_auth(user, pass)}.}
+
+\item{clean}{Logical. Should output be cleaned into a \code{tibble}? Default: \code{TRUE}.}
 }
 \value{
-a tibble of feeds
+a \link[tibble:tibble]{tibble::tibble} of feeds
 }
 \description{
 Retrieve a list of feeds created by a given actor
