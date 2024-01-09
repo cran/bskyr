@@ -10,6 +10,10 @@ template_var_auth <- function() { # nocov start
   'Authentication information. Defaults to `bs_auth(user, pass)`.'
 } # nocov end
 
+template_var_cursor <- function() { # nocov start
+  'Character, length 1. A cursor property from a prior response. Default: `NULL`.'
+} # nocov end
+
 template_var_actor <- function() { # nocov start
   "Character, length 1. name of 1 actor, such as `'chriskenny.bsky.social'`"
 } # nocov end
@@ -46,7 +50,7 @@ template_var_limit <- function(val = NULL) { # nocov start
   if (is.null(val)) {
     'Integer. Maximum number to request.'
   } else {
-    paste0('Integer. Maximum number to request. Maximum: `', val, '`')
+    paste0('Integer. Number of records to request. If over `', val, '`, multiple requests are made.')
   }
 } # nocov end
 

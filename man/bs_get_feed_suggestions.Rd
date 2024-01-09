@@ -5,6 +5,7 @@
 \title{Get a list of feed suggestions}
 \usage{
 bs_get_feed_suggestions(
+  cursor = NULL,
   limit = NULL,
   user = get_bluesky_user(),
   pass = get_bluesky_pass(),
@@ -13,7 +14,9 @@ bs_get_feed_suggestions(
 )
 }
 \arguments{
-\item{limit}{Integer. Maximum number to request. Maximum: \code{100}}
+\item{cursor}{Character, length 1. A cursor property from a prior response. Default: \code{NULL}.}
+
+\item{limit}{Integer. Number of records to request. If over \code{100}, multiple requests are made.}
 
 \item{user}{Character. User name to log in with. Defaults to \code{get_bluesky_user()}.}
 
