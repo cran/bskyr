@@ -1,3 +1,50 @@
+# bskyr 0.2.0
+
+* Improves processing of posts into tidy objects, impacting:
+  * `bs_get_posts()`: Posts are now returned as a tibble with one row per post, regardless of type.
+  * `bs_get_author_feed()`: Posts no longer create extra columns when there are multiple embeds.
+* Adds support for starter packs (#7)
+  * `bs_get_actor_starter_packs()` retrieves a list of starter packs for a specific actor.
+  * `bs_get_starter_pack()` retrieves a specific starter pack.
+  * `bs_get_starter_packs()` retrieves a list of starter packs.
+* Adds support for additional search parameters in `bs_search_posts()` (#6)
+* Adds support for emoji in the text of posts, powered by the emoji package. (#11)
+* Adds `bs_url_to_uri()` to convert a URL to a Bluesky URI.
+  * This additionally allows `bs_get_posts()` to take URLs.
+* Add support for posting videos within `bs_post()`, including gifs (#5).
+* Improves list reading functionality
+  * `bs_get_actor_lists()` retrieves all lists made by an actor
+  * `bs_get_list()` retrieves a view of a list
+* Expands support for working with lists (#9)
+  * `bs_new_list()` creates a new list
+  * `bs_delete_list()` deletes a list
+  * `bs_new_list_item()` adds someone to a list 
+  * `bs_delete_list_item()` removes someone from a list
+* Adds new helper function `bs_extract_record_key()` to extract the record id or key from a URL or URI.
+* Adds support for getting relationships between users with `bs_get_relationships()`.
+* Adds support for getting quote posts for a given post with `bs_get_quotes()`.
+* Fixes bug in repeated requests which could result in duplicate responses. (#13)
+* Minor improvements to `bs_post()`
+  * Adds a `max_tries` argument that can be set to avoid transient issues. (#15)
+  * Improves processing of tags in posts (@nguyenank, #10).
+  * Images created with `bs_create_record()` and `clean = TRUE` can be passed to `images` in `bs_post()`.
+* General improved processing for creating and deleting records
+  * `bs_follow()` allows for following other "subjects" (colloquially, other users)
+  * `bs_unfollow()` allows for deleting follow records
+  * `bs_block()` allows for blocking other "subjects"
+  * `bs_unblock()` allows for deleting block records
+  * `bs_unlike()` allows for deleting like records
+  * `bs_delete_repost()` allows for deleting repost records
+  * `bs_new_starter_pack()` allows for creating new starter packs
+  * `bs_delete_starter_pack()` allows for deleting starter packs
+
+# bskyr 0.1.3
+
+* Fixes a bug where posting a single image fails (#3).
+* Improves authentication experience using a local cache to avoid timeouts (#2).
+* Requires alt text in `bs_post()` to avoid issues with posting images due to accessibility settings upstream.
+* Adds support for linking for hashtags.
+
 # bskyr 0.1.2
 
 * Requests with `clean = TRUE` now include an attribute "request_url" with the request URL. This does not include any headers, so authentication information is *not* recorded.

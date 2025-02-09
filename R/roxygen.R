@@ -42,6 +42,10 @@ template_var_uris <- function() { # nocov start
   'Character. Vector of URIs for posts to get.'
 } # nocov end
 
+template_var_url <- function() { # nocov start
+  'Character, length 1. URL for record to get.'
+} # nocov end
+
 template_var_clean <- function() { # nocov start
   'Logical. Should output be cleaned into a `tibble`? Default: `TRUE`.'
 } # nocov end
@@ -74,16 +78,20 @@ template_var_blob <- function() { # nocov start
   'Character, files to upload to a repo.'
 } # nocov end
 
+template_var_video <- function() { # nocov start
+  'Character, videos to upload to a repo.'
+} # nocov end
+
 template_var_repo <- function() { # nocov start
-  "Character, length 1. The handle or DID of the repo."
+  'Character, length 1. The handle or DID of the repo.'
 } # nocov end
 
 template_var_collection <- function() { # nocov start
-  "Character, length 1. The NSID of the record collection."
+  'Character, length 1. The NSID of the record collection.'
 } # nocov end
 
 template_var_rkey <- function() { # nocov start
-  "Character, length 1. The CID of the version of the record. If not specified, then return the most recent version."
+  'Character, length 1. The CID of the version of the record. If not specified, then return the most recent version.'
 } # nocov end
 
 template_var_post <- function() { # nocov start
@@ -94,3 +102,26 @@ template_var_record <- function() { # nocov start
   'List, length 1. Description of a record.'
 } # nocov end
 
+template_var_starter_pack <- function() { # nocov start
+  'Character vector, length 1. URI of starter pack to get.'
+} # nocov end
+
+template_var_starter_packs <- function() { # nocov start
+  'Character vector. Vector of URIs of starter packs to get.'
+} # nocov end
+
+template_var_list <- function() { # nocov start
+  'Character vector, length 1. Reference of the list record to get.'
+} # nocov end
+
+template_var_query <- function() { # nocov start
+  'Character vector, length 1. character. Search query, Lucene query syntax is recommended.'
+} # nocov end
+
+template_var_max_tries <- function() { # nocov start
+  'Integer, >= 2. Number of times to retry the request if the first fails.'
+} # nocov end
+
+template_var_subject <- function() { # nocov start
+  'Character, length 1. Subject to act on, as a handle or did.'
+} # nocov end

@@ -9,7 +9,7 @@
 #' @concept record
 #'
 #' @section Lexicon references:
-#' [feed/post.json (2023-11-25)](https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/repost.json)
+#' [feed/repost.json (2023-11-25)](https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/repost.json)
 #' [repo/createRecord.json (2023-11-25)](https://github.com/bluesky-social/atproto/blob/main/lexicons/com/atproto/repo/createRecord.json)
 #'
 #' @section Function introduced:
@@ -48,7 +48,9 @@ bs_repost <- function(post,
     httr2::req_perform() |>
     httr2::resp_body_json()
 
-  if (!clean) return(resp)
+  if (!clean) {
+    return(resp)
+  }
 
   resp |>
     tibble::as_tibble() |>

@@ -14,6 +14,52 @@ parse_urls <- function(txt) {
   parse_regex(txt, regex = url_regex, drop_n = 1L)
 }
 
+parse_tags <- function(txt) {
+  # regex taken from: https://github.com/bluesky-social/atproto/blob/main/packages/api/src/rich-text/util.ts
+
+  tag_regex <- '(^|\\s)[#\\uFF03](?<tag>(?!\\ufe0f)[^\\s\\u00AD\\u2060\\u200A\\u200B\\u200C\\u200D\\u20e2]*[^\\d\\s\\p{P}\\u00AD\\u2060\\u200A\\u200B\\u200C\\u200D\\u20e2]+[^\\s\\u00AD\\u2060\\u200A\\u200B\\u200C\\u200D\\u20e2]*)?'
+
+  matches <- stringi::stri_locate_all_regex(txt, tag_regex, capture_groups = TRUE, get_length = TRUE, omit_no_match = TRUE)
+  lapply(seq_along(matches), function(m) {
+    tags <- attr(matches[[m]], "capture_groups")$tag
+    lapply(seq_len(nrow(tags)), function(r) {
+
+      # did not find tag
+      if (tags[r, "length", drop=TRUE] < 0) {
+        return(list())
+      }
+
+      start_idx <- unname(tags[r, "start", drop=TRUE])
+      text <- stringr::str_sub(
+        txt[[m]],
+        start = start_idx,
+        end = start_idx + tags[r, "length", drop=TRUE]
+      )
+      # strip ending punctuation and any spaces
+      punct_space_unicode_set <- '[\\p{P}\\p{Z}\\n\\u00AD\\u2060\\u200A\\u200B\\u200C\\u200D\\u20e2]'
+      stripped_text <- stringi::stri_trim_right(text, punct_space_unicode_set, negate = TRUE)
+      text_length <- stringi::stri_numbytes(stripped_text)
+
+      if (text_length > 64) {
+        return(list())
+      }
+
+      numbytes_start <- stringi::stri_numbytes(stringr::str_sub(txt,
+                                                                start = 1L,
+                                                                end = start_idx - 1))
+      numbytes_hashtag <- stringi::stri_numbytes(stringr::str_sub(txt,
+                                                                  start = start_idx - 1,
+                                                                  end = start_idx - 1))
+
+      list(
+        start = numbytes_start - numbytes_hashtag,
+        end = numbytes_start + text_length,
+        text = stringr::str_sub(stripped_text, start = 1L)
+      )
+    })
+  })
+}
+
 parse_regex <- function(txt, regex, drop_n = 0L) {
   matches <- stringr::str_locate_all(txt, regex)
   txt_cum_wts <- weight_by_bytes(txt)
@@ -47,6 +93,7 @@ weight_by_bytes <- function(txt) {
 parse_facets <- function(txt, auth) {
   mens <- parse_mentions(txt)
   urls <- parse_urls(txt)
+  tags <- parse_tags(txt)
 
   mens_ok <- lapply(mens, function(m_l) {
     lapply(m_l, function(m) {
@@ -87,10 +134,26 @@ parse_facets <- function(txt, auth) {
     })
   })
 
+  facet_tags <- lapply(seq_along(tags), function(i) {
+    lapply(seq_along(tags[[i]]), function(j) {
+      list(
+        index = list(
+          byteStart = tags[[i]][[j]]$start,
+          byteEnd = tags[[i]][[j]]$end
+        ),
+        features = list(list(
+          '$type' = 'app.bsky.richtext.facet#tag',
+          tag = tags[[i]][[j]]$text
+        ))
+      )
+    })
+  })
+
   lapply(seq_along(mens), function(i) {
     out <- c(
       facet_mens[[i]],
-      facet_urls[[i]]
+      facet_urls[[i]],
+      facet_tags[[i]]
     ) |>
       purrr::discard(is.null) |>
       purrr::discard(purrr::is_empty)
@@ -129,4 +192,10 @@ parse_uri <- function(uri) {
     collection = collection,
     rkey = rkey
   )
+}
+
+parse_emoji <- function(txt) {
+  emoji_regex <- ':[a-zA-Z0-9_]+:' #'(?<=:)[^:\\s]+(?=:)'
+
+  stringr::str_replace_all(txt, emoji_regex, replace_emoji)
 }

@@ -24,7 +24,7 @@ widen <- function(x, i = 4) {
   x |>
     tibble::enframe() |>
     tidyr::pivot_wider() |>
-    tidyr::unnest_wider(col = where(~purrr::pluck_depth(.x) < i), simplify = TRUE, names_sep = '_') |>
+    tidyr::unnest_wider(col = where(~ purrr::pluck_depth(.x) < i), simplify = TRUE, names_sep = '_') |>
     dplyr::rename_with(.fn = function(x) substr(x, start = 1, stop = nchar(x) - 2), .cols = dplyr::ends_with('_1'))
 }
 
@@ -34,8 +34,10 @@ list_hoist <- function(l) {
 
 validate_user <- function(x) {
   # regex adapted from https://atproto.com/specs/handle#handle-identifier-syntax
-  if (!stringr::str_detect(x,
-                           '^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$')) {
+  if (!stringr::str_detect(
+    x,
+    '^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$'
+  )) {
     cli::cli_abort('{.arg user} must be a valid handle.')
   }
   invisible(x)
@@ -53,7 +55,6 @@ validate_pass <- function(x) {
 
 # reply helper ----
 get_reply_refs <- function(uri, auth) {
-
   parent <- bs_get_record(repo = uri, auth = auth, clean = FALSE)
 
   parent_reply <- parent$value$reply
@@ -104,6 +105,56 @@ repeat_request <- function(req, req_seq, cursor, txt = 'Fetching data') {
       httr2::req_perform() |>
       httr2::resp_body_json()
     cursor <- resp[[i]]$cursor
+    if (is.null(cursor)) {
+      break
+    }
   }
-  resp
+  resp |>
+    purrr::discard(is.null)
+}
+
+# emoji parsing ----
+
+pad_emoji <- function(emo) {
+  paste0(':', emo, ':')
+}
+
+replace_emoji <- function(emo) {
+  if (!rlang::is_installed('emoji')) {
+    return(emo)
+  }
+
+  emo <- stringr::str_remove_all(emo, ':')
+
+  noms <- names(emoji::emoji_name)
+
+  if (emo %in% noms) {
+    emoji::emoji_name[emo]
+  } else {
+    pad_emoji(emo)
+  }
+}
+
+# general helpers ----
+is_user_did <- function(x) {
+  stringr::str_starts(x, stringr::fixed('did:'))
+}
+
+
+# handle blob tibbles ----
+
+blob_tb_to_list <- function(tb) {
+  lapply(seq_len(nrow(tb)),
+    function(r) {
+      list(
+        blob = list(
+          `$type` = tb[[r, '$type']],
+          ref = list(
+            `$link` = tb[[r, 'ref_$link']]
+          ),
+          mimeType = tb[[r, 'mime_type']],
+          size = as.integer(tb[[r, 'size']])
+        )
+      )
+  })
 }

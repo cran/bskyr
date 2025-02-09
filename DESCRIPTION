@@ -1,6 +1,6 @@
 Package: bskyr
 Title: Interact with 'Bluesky' Social
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: 
     person(given = "Christopher T.",
            family = "Kenny",
@@ -15,10 +15,11 @@ Description: Collect data from and make posts on 'Bluesky' Social
     tidy format and posts can be made using a simple interface.
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Imports: cli, dplyr, fs, httr2, lubridate, mime, purrr, rlang, stringi,
         stringr, tibble, tidyr
-Suggests: httptest2, jsonlite, spelling, testthat (>= 3.0.0)
+Suggests: base64enc, emoji, httptest2, jsonlite, knitr, rmarkdown,
+        spelling, testthat (>= 3.0.0)
 URL: https://github.com/christopherkenny/bskyr,
         http://christophertkenny.com/bskyr/
 BugReports: https://github.com/christopherkenny/bskyr/issues
@@ -26,9 +27,9 @@ Config/testthat/edition: 3
 Language: en-US
 Depends: R (>= 4.1.0)
 NeedsCompilation: no
-Packaged: 2024-01-09 19:40:08 UTC; chris
+Packaged: 2025-02-09 00:17:25 UTC; chris
 Author: Christopher T. Kenny [aut, cre]
     (<https://orcid.org/0000-0002-9386-6860>)
 Maintainer: Christopher T. Kenny <christopherkenny@fas.harvard.edu>
 Repository: CRAN
-Date/Publication: 2024-01-09 21:00:09 UTC
+Date/Publication: 2025-02-09 00:30:01 UTC

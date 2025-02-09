@@ -6,6 +6,15 @@
 \usage{
 bs_search_posts(
   query,
+  sort = NULL,
+  since = NULL,
+  until = NULL,
+  mentions = NULL,
+  author = NULL,
+  lang = NULL,
+  domain = NULL,
+  url = NULL,
+  tag = NULL,
   cursor = NULL,
   limit = NULL,
   user = get_bluesky_user(),
@@ -15,7 +24,25 @@ bs_search_posts(
 )
 }
 \arguments{
-\item{query}{character. search query, Lucene query syntax is recommended.}
+\item{query}{Character vector, length 1. character. Search query, Lucene query syntax is recommended.}
+
+\item{sort}{character. Order or results. Either \code{'top'} or \code{'latest'}}
+
+\item{since}{character. Filter results for posts on or after the indicated datetime or ISO date (YYYY-MM-DD).}
+
+\item{until}{character. Filter results for posts before the indicated datetime or ISO date (YYYY-MM-DD).}
+
+\item{mentions}{character. Filter to posts which mention the given account.}
+
+\item{author}{character. Filter to posts by the given account.}
+
+\item{lang}{character. Filter to posts in the given language.}
+
+\item{domain}{character. Filter to posts with URLs (facet links or embeds) linking to the given domain (hostname). Server may apply hostname normalization.}
+
+\item{url}{character. Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching.}
+
+\item{tag}{character. Filter to posts with the given tag (hashtag), based on rich-text facet or tag field. Do not include the hash (#) prefix. Multiple tags can be specified, with 'AND' matching.}
 
 \item{cursor}{Character, length 1. A cursor property from a prior response. Default: \code{NULL}.}
 
@@ -37,7 +64,7 @@ Find posts matching search criteria
 }
 \section{Lexicon references}{
 
-\href{https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/searchPosts.json}{feed/searchPosts.json (2023-12-13)}
+\href{https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/searchPosts.json}{feed/searchPosts.json (2024-11-25)}
 }
 
 \section{Function introduced}{
@@ -48,6 +75,7 @@ Find posts matching search criteria
 \examples{
 \dontshow{if (has_bluesky_pass() & has_bluesky_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bs_search_posts('redistricting')
+bs_search_posts('ggplot2', tag = 'rstats', sort = 'latest')
 \dontshow{\}) # examplesIf}
 }
 \concept{feed}

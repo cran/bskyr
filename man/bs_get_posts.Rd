@@ -31,7 +31,7 @@ Retrieve thread of posts
 }
 \section{Lexicon references}{
 
-\href{https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/getPostThread.json}{feed/getPostThread.json (2023-10-01)}
+\href{https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/getPosts.json}{feed/getPosts.json (2023-10-01)}
 }
 
 \section{Function introduced}{
@@ -42,6 +42,7 @@ Retrieve thread of posts
 \examples{
 \dontshow{if (has_bluesky_pass() && has_bluesky_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 bs_get_posts('at://did:plc:ic6zqvuw5ulmfpjiwnhsr2ns/app.bsky.feed.post/3k7qmjev5lr2s')
+bs_get_posts('https://bsky.app/profile/chriskenny.bsky.social/post/3lc5d6zspys2c')
 \dontshow{\}) # examplesIf}
 }
 \concept{feed}
