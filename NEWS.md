@@ -1,3 +1,13 @@
+# bskyr 0.3.0
+
+* Adds support for embedded link cards in `bs_post()`. (#17)
+* Adds new function `bs_new_embed_external()` to support manual setup of external embeds. (#17)
+* Adds more control to `bs_post()` with a new argument `created_at` to customize times of posts. (#21)
+* Attempts to add an aspect ratio to image posts, if the image can be read by `magick`. (#20)
+* Adds support to get a list feed with `bs_get_list_feed()`. (#26)
+* Corrects a bug in parsing of URLs in posts and tagging them as richtext. (#23)
+* Adds `bs_delete_post()` to delete posts.
+
 # bskyr 0.2.0
 
 * Improves processing of posts into tidy objects, impacting:
