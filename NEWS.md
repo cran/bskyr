@@ -1,3 +1,36 @@
+# bskyr 0.4.0
+
+* Fixes an issue where OpenGraph links with a size hint would fail downloading. (#32)
+* Improves transformations of starter packs into tibbles with cleaner unnesting. (#31)
+* Allows for more than 25 actors in `bs_get_profile()`, (#29, #30).
+* No longer overly widens results in `bs_get_profile()`. (#42)
+* Improves `bs_get_likes()` processing and makes it clear it is self-only.
+* Adds 3 vignettes. (#12)
+  * "Creating Records on Bluesky Social"
+  * "Gathering Data from Bluesky Social"
+  * "Working with Lists and Starter Packs"
+* Adds support for direct messages or conversations (aka "convos").
+  * `bs_list_convos()` lists all conversations
+  * `bs_get_messages()` retrieves messages from a conversation
+  * `bs_get_convo()` retrieves details on a conversation  
+  * `bs_get_convo_log()` retrieves the log on all conversations
+  * `bs_update_read()` sets a conversation to read
+  * `bs_update_all_read()` sets all conversations to read
+  * `bs_accept_convo()` accepts a conversation
+  * `bs_add_reaction()` adds a reaction to a message
+  * `bs_remove_reaction()` removes a reaction to a message
+  * `bs_mute_convo()` mutes a conversation
+  * `bs_unmute_convo()` unmutes a conversation
+  * `bs_send_message()` sends a message to a conversation
+  * `bs_delete_message_for_self()` hides a message for you
+  * `bs_leave_convo()` leaves a conversation
+  * `bs_get_convo_availability()` retrieves info on if you can chat with another actor
+  * `bs_send_message_batch()` sends a batch of messages to different conversations
+* Fixes an issue where actual numbers with a # sign would cause failures in posting (#45).
+* Avoids creating raw version of files for upload where possible (#16).
+* Always returns `embed` for `bs_get_posts()` (#40, #41).
+* Include all returned information in `bs_get_author_feed()`. Note that this requires adding a prefix to `reply` and `reason` information. (#43)
+
 # bskyr 0.3.0
 
 * Adds support for embedded link cards in `bs_post()`. (#17)

@@ -105,7 +105,7 @@ created and the post is sent as is.
 }
 
 \examples{
-\dontshow{if (has_bluesky_pass() & has_bluesky_user()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (has_bluesky_pass() & has_bluesky_user()) withAutoprint(\{ # examplesIf}
 bs_post('Test post from R CMD Check for r package `bskyr`
 via @bskyr.bsky.social (https://christophertkenny.com/bskyr/)')
 bs_post('Test self-reply from r package `bskyr`
@@ -125,13 +125,17 @@ via @bskyr.bsky.social (https://christophertkenny.com/bskyr/)',
 bs_post('Test quote with :emoji: and :fire: and :confetti_ball: from r package
   `bskyr` via @bskyr.bsky.social (https://christophertkenny.com/bskyr/)')
 
-bs_post(text = 'Testing images and aspect ratios from R',
+bs_post(
+  text = 'Testing images and aspect ratios from R',
   images = fs::path_package('bskyr', 'man/figures/logo.png'),
-  images_alt = 'hexagonal logo of the R package bskyr, with the text "bskyr" on a cloud')
+  images_alt = 'hexagonal logo of the R package bskyr, with the text "bskyr" on a cloud'
+)
 
-bs_post(text = 'testing sending videos from R',
+bs_post(
+  text = 'testing sending videos from R',
   video = fs::path_package('bskyr', 'man/figures/pkgs.mp4'),
-  video_alt = 'a carousel of package logos, all hexagonal')
+  video_alt = 'a carousel of package logos, all hexagonal'
+)
 \dontshow{\}) # examplesIf}
 }
 \concept{record}

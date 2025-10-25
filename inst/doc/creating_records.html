@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Creating Records on Bluesky Social</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Creating Records on Bluesky Social</h1>
+
+
+
+<p>Bluesky Social’s API is built around a decentralized model where user
+content and interactions are stored as <strong>records</strong> in your
+personal data repository. Each record follows a strict schema defined in
+a <em>lexicon</em>. For example, a regular post is defined by the
+<code>app.bsky.feed.post</code> lexicon, while a “like” is defined by
+<code>app.bsky.feed.like</code>. This means that actions like posting,
+liking, or reposting on Bluesky all translate to creating specific
+record types in your account. The <code>bskyr</code> package provides
+high-level R functions to create these records programmatically,
+aligning with the underlying lexicons.</p>
+<p>A detailed understanding of lexicons isn’t required for basic use,
+but it’s useful to know that each <code>bskyr</code> function
+corresponds to a particular record type. In this vignette, we
+demonstrate how to create content and interactions on Bluesky Social
+using <code>bskyr</code>. We will cover how to make new posts (including
+text-only posts, quote posts, and posts with media or links), how to
+reply to posts, and how to interact with posts by liking or reposting
+them. We also show how to delete content you’ve created. Finally, we
+touch on advanced usage of <code>bs_create_record()</code> for creating
+records in a more generic way.</p>
+<p><strong>Authentication:</strong> Before proceeding, ensure you are
+authenticated with Bluesky. Assuming you have already configured your
+Bluesky credentials (via <code>set_bluesky_user()</code> and
+<code>set_bluesky_pass()</code> or environment variables), you can
+authenticate once at the start:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(bskyr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>auth <span class="ot">&lt;-</span> <span class="fu">bs_auth</span>(<span class="at">user =</span> <span class="fu">bs_get_user</span>(), <span class="at">pass =</span> <span class="fu">bs_get_pass</span>())</span></code></pre></div>
+<p>In the current version of <code>bskyr</code>, you do not need to take
+this step, as it is handled automatically when you call any function
+that requires authentication.</p>
+<div id="creating-a-new-post" class="section level2">
+<h2>Creating a New Post</h2>
+<p>To create a new text post on Bluesky, use the <code>bs_post()</code>
+function. At minimum, you provide the content of the post via the
+<code>text</code> argument. This function creates a <strong>feed post
+record</strong> in your Bluesky account (using the
+<code>app.bsky.feed.post</code> lexicon under the hood). It returns a
+<code>tibble</code> with details of the created post, including its
+unique URI and other metadata.</p>
+<p>For example, here’s how to create a simple text-only post:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">bs_post</span>(<span class="at">text =</span> <span class="st">&#39;[vignette] This is a post from R using `bskyr` on Creating Records.&#39;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreic4… 3m3xsq6md… valid</span></span></code></pre></div>
+<p>When this function is called, it will post the given text to your
+Bluesky feed. The result (if assigned) contains the post’s URI and CID
+(content ID). You may want to save the result (e.g., in a variable) if
+you plan to reference or delete this post later.</p>
+</div>
+<div id="creating-a-post-with-a-quote" class="section level2">
+<h2>Creating a Post with a Quote</h2>
+<p>Bluesky allows you to quote another post (similar to quoting a tweet,
+where you share someone’s post with your own commentary). To create a
+quote post, use the quote argument in <code>bs_post()</code>. You should
+supply the URI or web link of the post you want to quote.
+<code>bskyr</code> will then embed the referenced post into your new
+post record (under the hood this uses the
+<code>app.bsky.embed.record</code> schema for the quoted record).</p>
+<p>For example, to quote another user’s post while adding your own
+text:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">bs_post</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">&#39;[vignette] This is a quote from R using `bskyr` on Creating Records&#39;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">quote =</span> <span class="st">&#39;https://bsky.app/profile/bskyr.bsky.social/post/3lpem3br3qn2z&#39;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreihf… 3m3xsq76r… valid</span></span></code></pre></div>
+<p>Simply include the post ID as <code>quote</code> of the post you want
+to quote. The <code>bs_post()</code> call will create a new post
+containing your text and a quote of the referenced post. You can use
+either the <code>https://bsky.app/profile/...</code>. URL as shown, or
+the equivalent AT Protocol URI <code>at://...</code> for the post. The
+function will handle it appropriately.</p>
+</div>
+<div id="posting-with-media-and-links" class="section level2">
+<h2>Posting with Media and Links</h2>
+<p>Bluesky posts can include media or link previews in addition to text.
+The <code>bs_post()</code> function makes it easy to attach these:</p>
+<ul>
+<li><em>Images</em>: You can attach up to four images to a post using
+the <code>images</code> argument. Provide a character vector of file
+paths to the images. It’s recommended to also provide descriptive alt
+text for each image via the images_alt argument, with a character vector
+of the same length as the images. The images will be uploaded and
+embedded in the post (using the <code>app.bsky.embed.images</code>
+lexicon).</li>
+<li><em>External links</em>: If your post text contains a URL,
+<code>bs_post()</code> will by default attempt to embed a preview card
+for that link (using the <code>app.bsky.embed.external</code> lexicon).
+This means you can include an external URL in the text and Bluesky may
+display a link preview on supported clients.</li>
+</ul>
+<p>For example, to create a post with an image attached:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">bs_post</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">&#39;[vignette] This is a post with an image from R using `bskyr` on Creating Records&#39;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">images =</span> <span class="fu">system.file</span>(<span class="st">&#39;help/figures/logo.png&#39;</span>, <span class="at">package =</span> <span class="st">&#39;bskyr&#39;</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">images_alt =</span> <span class="st">&#39;A hexagon logo for bskyr with the letters &quot;bskyr&quot; on a cloud&#39;</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreifj… 3m3xsq7qc… valid</span></span></code></pre></div>
+<p>In this snippet, the image located at
+<code>&quot;help/figures/logo.png&quot;</code> within <code>bskyr</code> will be
+uploaded and attached to the post, with alt text describing the image.
+You can list multiple image file paths in images (up to 4) and provide a
+corresponding alt text entry for each in images_alt.</p>
+<p>And here is an example of a post that includes an external link in
+the text:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">bs_post</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">&#39;[vignette] This is a post with a link from R using `bskyr` on Creating Records. Check out the package at https://christophertkenny.com/bskyr/.&#39;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreihv… 3m3xsqakw… valid</span></span></code></pre></div>
+<p>When posting, if a URL (such as <a href="https://example.com" class="uri">https://example.com</a> in this case) is present in the
+text, <code>bs_post()</code> will attempt to add it as an embedded link
+preview. On Bluesky, this creates a card with the link’s title,
+description, and thumbnail (if available) in your post. The exact
+appearance may depend on the client app, but the underlying record will
+include an <code>app.bsky.embed.external</code> embed for the URL.</p>
+</div>
+<div id="replying-to-a-post" class="section level2">
+<h2>Replying to a Post</h2>
+<p>Replying to a post is straightforward using <code>bskyr</code>. A
+reply is essentially a new post that is linked to an existing post as
+its parent. To reply to a specific post, use the reply argument in
+<code>bs_post()</code> and provide the URI or link of the post you want
+to reply to. The <code>bs_post()</code> function will create a new post
+record that references the given post as its parent (setting the
+appropriate reply thread reference in the
+<code>app.bsky.feed.post</code> record).</p>
+<p>For example, to reply to someone’s post:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">bs_post</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">text  =</span> <span class="st">&#39;[vignette] This is a reply from R using `bskyr` on Creating Records&#39;</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">reply =</span> <span class="st">&#39;https://bsky.app/profile/bskyr.bsky.social/post/3lpemxzni4l2m&#39;</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreiez… 3m3xsqash… valid</span></span></code></pre></div>
+<p>This call will create a post with your text, threaded as a reply to
+the specified post. In Bluesky, the new post will appear as a response
+in the conversation thread of the original post.</p>
+<p><em>Note</em>: It’s possible to use both reply and quote
+simultaneously in a single <code>bs_post()</code> call if you want to
+quote a post while replying to it. In that case, the new post would be a
+reply in the thread and include a quoted embed of the target post.</p>
+</div>
+<div id="liking-a-post" class="section level2">
+<h2>Liking a Post</h2>
+<p>Liking a post on Bluesky creates a “like” record in your account
+(defined by the <code>app.bsky.feed.like</code> lexicon). Using
+<code>bskyr</code>, you can like a post with the function
+<code>bs_like()</code>. This function will record that you liked a given
+post.</p>
+<p>To like a post, you need to specify which post to like. The
+<code>bs_like()</code> function accepts a post argument where you can
+provide the post’s URI or web URL. For convenience, you can pass the
+same kind of link you would use for quoting or replying.</p>
+<p>For example, to like a particular post:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">bs_like</span>(<span class="at">post =</span> <span class="st">&#39;https://bsky.app/profile/chriskenny.bsky.social/post/3lktjjvxvdk2g&#39;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreiat… 3m3xsqb2s… valid</span></span></code></pre></div>
+<p>This will create a like record for that post. The function returns a
+<code>tibble</code> with information about the new like (including its
+own URI, since the like is itself a record in your repository). There is
+no visible effect in the output, but on Bluesky the target post will now
+show as liked by your account.</p>
+</div>
+<div id="reposting-a-post" class="section level2">
+<h2>Reposting a Post</h2>
+<p>Reposting is an action that creates a repost record (using the
+<code>app.bsky.feed.repost</code> lexicon). A repost indicates you are
+sharing someone else’s post on your feed without adding additional text
+of your own.</p>
+<p>To repost a post via bskyr, use the <code>bs_repost()</code>
+function. Provide the target post’s URI or URL as the argument, and
+<code>bs_repost()</code> will create a repost record under your
+account.</p>
+<p>For example, to repost a given post:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">bs_repost</span>(<span class="at">post =</span> <span class="st">&#39;https://bsky.app/profile/chriskenny.bsky.social/post/3lktjjvxvdk2g&#39;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreigt… 3m3xsqbbn… valid</span></span></code></pre></div>
+<p>This call will create a repost record for that post. The function
+returns a <code>tibble</code> with details of the repost. On Bluesky,
+the effect is that the original post will appear on your feed as a
+repost by you.</p>
+</div>
+<div id="deleting-content-posts-likes-and-reposts" class="section level2">
+<h2>Deleting Content (Posts, Likes, and Reposts)</h2>
+<p>All posts and interactions you create are stored as records in your
+Bluesky repository, and they can be deleted if needed.
+<code>bskyr</code> provides convenience functions to delete records:</p>
+<ul>
+<li>Deleting a post: use <code>bs_delete_post()</code>.</li>
+<li>Deleting a like: use <code>bs_delete_like()</code> (this un-likes
+the post).</li>
+<li>Deleting a repost: use <code>bs_delete_repost()</code> (this removes
+the repost from your feed).</li>
+</ul>
+<p>Each of these functions requires the record’s unique key (often
+called the record key or rkey) to identify which record to delete. If
+you have the original object returned when you created the record, you
+can extract its key using <code>bs_extract_record_key()</code> on the
+record’s URI. For example, if you saved a post to an object post when
+creating it, you can delete it like so:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">bs_post</span>(<span class="at">text =</span> <span class="st">&#39;[vignette] This is a post to be deleted from R using `bskyr` on Creating Records.&#39;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">bs_delete_post</span>(<span class="fu">bs_extract_record_key</span>(post<span class="sc">$</span>uri))</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; [1] 200</span></span></code></pre></div>
+<p>In the above example, <code>post$uri</code> contains the full URI of
+the new post record, and <code>bs_extract_record_key()</code> pulls out
+the record’s key from that URI. We then pass that key into
+<code>bs_delete_post()</code> to delete the post. The <code>200</code>
+displayed is the HTTP status code indicating success.</p>
+<p>Similarly, if you had saved a like or repost:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>liked <span class="ot">&lt;-</span> <span class="fu">bs_like</span>(<span class="at">post =</span> <span class="st">&#39;https://bsky.app/profile/bskyr.bsky.social/post/3lpemxzni4l2m&#39;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>reposted <span class="ot">&lt;-</span> <span class="fu">bs_repost</span>(<span class="at">post =</span> <span class="st">&#39;https://bsky.app/profile/bskyr.bsky.social/post/3lpemxzni4l2m&#39;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">bs_delete_like</span>(<span class="fu">bs_extract_record_key</span>(liked<span class="sc">$</span>uri))</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; [1] 200</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">bs_delete_repost</span>(<span class="fu">bs_extract_record_key</span>(reposted<span class="sc">$</span>uri))</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; [1] 200</span></span></code></pre></div>
+<p>The pattern is the same: the object returned by
+<code>bs_like()</code> or <code>bs_repost()</code> has a uri field, and
+using <code>bs_extract_record_key()</code> on it gives the identifier
+needed to delete that record via the appropriate delete function.</p>
+<p><em>Note</em>: Under the hood, all these deletion functions are
+wrappers around <code>bs_delete_record()</code>. You could call
+<code>bs_delete_record(collection, rkey, ...)</code> directly by
+specifying the record’s collection NSID (e.g.,
+<code>&#39;app.bsky.feed.post&#39;</code> for a post) and its record key. The
+specialized functions (<code>bs_delete_post()</code>,
+<code>bs_delete_like()</code>, etc.) simply provide a convenient
+shorthand for their respective record types.</p>
+<p>For example, suppose we want to create a post by calling
+<code>bs_create_record()</code> directly, instead of using
+<code>bs_post()</code>. We need to use the
+<code>app.bsky.feed.post</code> collection and provide a record with the
+required fields (at least the text and a timestamp):</p>
+</div>
+<div id="advanced-using-bs_create_record" class="section level2">
+<h2>Advanced: Using <code>bs_create_record()</code></h2>
+<p>As you may have noticed, everything in this vignette centers around
+records. Posting, liking, quoting, etc. are all ways of creating records
+in your Bluesky repository. Deleting is simply removing those
+records.</p>
+<p>For advanced use cases, <code>bskyr</code> offers a low-level
+interface <code>bs_create_record()</code> which can create an arbitrary
+record in your repo, given the correct parameters. This function is
+essentially a direct wrapper around the AT Protocol endpoint for
+creating records (<code>com.atproto.repo.createRecord</code>). It
+requires you to specify the collection (the lexicon NSID for the record
+type) and a record list that contains the fields defined by that
+record’s lexicon.</p>
+<p>Most users will not need to call <code>bs_create_record()</code>
+directly, since higher-level functions like <code>bs_post()</code>,
+<code>bs_like()</code>, etc., construct the appropriate record for you.
+However, if you need to create a record type that <code>bskyr</code>
+doesn’t yet have a helper for, or you want fine-grained control,
+<code>bs_create_record()</code> is the tool to use. Keep in mind that
+you must follow the lexicon’s schema exactly when constructing the
+record list.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>post_record <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">&#39;[vignette] Posting via bs_create_record()&#39;</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">createdAt =</span> <span class="fu">bs_created_at</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">bs_create_record</span>(<span class="at">collection =</span> <span class="st">&#39;app.bsky.feed.post&#39;</span>, <span class="at">record =</span> post_record)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreifs… 3m3xsqc47… valid</span></span></code></pre></div>
+<p>Here we constructed a list post_record with a text field for the post
+content and a <code>createdAt</code> field. We used the helper function
+<code>bs_created_at()</code> to generate the current timestamp in the
+format the Bluesky lexicon expects. Passing this into
+<code>bs_create_record()</code> with the appropriate collection will
+create a new post record identical to one created by
+<code>bs_post()</code>. The return value would be a tibble with the
+details of the created record (including its URI and CID).</p>
+<p>As another example, one could manually create a like record with
+<code>bs_create_record()</code> (though normally you would use
+<code>bs_like()</code>). The <code>app.bsky.feed.like</code> lexicon
+expects a subject (the post being liked, identified by its URI and CID)
+and a timestamp. If <code>post_rcd</code> is a post object we fetched or
+have details for, we could do:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>post_rcd <span class="ot">&lt;-</span> <span class="fu">bs_get_record</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="st">&#39;https://bsky.app/profile/bskyr.bsky.social/post/3lpeonujcdg2q&#39;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="at">clean =</span> <span class="cn">FALSE</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>like_record <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="at">subject =</span> <span class="fu">list</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>    <span class="at">uri =</span> post_rcd<span class="sc">$</span>uri,</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    <span class="at">cid =</span> post_rcd<span class="sc">$</span>cid</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  ),</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  <span class="at">createdAt =</span> <span class="fu">bs_created_at</span>()</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>)</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="fu">bs_create_record</span>(<span class="at">collection =</span> <span class="st">&#39;app.bsky.feed.like&#39;</span>, <span class="at">record =</span> like_record)</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt;   uri                              cid   commit_cid commit_rev validation_status</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;            </span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt; 1 at://did:plc:5c2r73erhng4bszmxl… bafy… bafyreico… 3m3xsqcdc… valid</span></span></code></pre></div>
+<p>This illustrates how you must supply the necessary fields (in this
+case, the post’s identifiers and a timestamp) to create a record. In
+practice, using <code>bs_like(post = ...)</code> is much simpler, but
+<code>bs_create_record()</code> gives you the flexibility to craft
+requests for any record type as long as you know the required
+schema.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>The <code>bskyr</code> package enables programmatic interaction with
+Bluesky Social by creating and managing the same records that underpin
+the Bluesky protocol. We covered how to make posts (with text, quotes,
+media, and links) and how to interact with others’ posts through
+replies, likes, and reposts. We also demonstrated how to delete content
+and touched on the advanced <code>bs_create_record()</code> interface
+for custom record creation. With these tools, you can integrate Bluesky
+Social into R workflows, bots, or analyses, taking full advantage of the
+AT Protocol’s openness and the convenience of tidyverse-style
+functions.</p>
+<hr />
+<p><strong>DISCLAIMER</strong>: This vignette has been written with help
+from ChatGPT 4o. It has been reviewed for correctness and edited for
+clarity by the package author. Please note any issues at <a href="https://github.com/christopherkenny/bskyr/issues" class="uri">https://github.com/christopherkenny/bskyr/issues</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -24,7 +24,6 @@
 bs_get_starter_pack <- function(starter_pack,
                                 user = get_bluesky_user(), pass = get_bluesky_pass(),
                                 auth = bs_auth(user, pass), clean = TRUE) {
-
   if (missing(starter_pack)) {
     cli::cli_abort('{.arg starter_pack} must list at least one user.')
   }
@@ -32,6 +31,7 @@ bs_get_starter_pack <- function(starter_pack,
     cli::cli_abort('{.arg starter_pack} must be a character vector.')
   }
 
+  starter_pack <- bs_url_to_uri(starter_pack, auth = auth)
 
   req <- httr2::request('https://bsky.social/xrpc/app.bsky.graph.getStarterPack') |>
     httr2::req_url_query(starterPack = starter_pack) |>
@@ -48,6 +48,11 @@ bs_get_starter_pack <- function(starter_pack,
   resp |>
     purrr::pluck('starterPack') |>
     widen() |>
+    tidyr::unnest_wider(col = dplyr::any_of('record'), names_sep = '_', simplify = TRUE) |>
+    dplyr::mutate(
+      dplyr::across(dplyr::any_of(c('feeds')), .fns = function(x) lapply(x, list_hoist)),
+      dplyr::across(dplyr::any_of(c('list', 'listItemsSample')), .fns = function(x) lapply(x, widen)),
+    ) |>
     add_req_url(req) |>
     add_cursor(resp) |>
     clean_names()

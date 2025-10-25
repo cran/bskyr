@@ -16,7 +16,7 @@ clean_names <- function(x) {
     stringr::str_replace('\\.', '_') |>
     stringr::str_replace('([a-z])([A-Z])', '\\1_\\2') |>
     tolower()
-  stats::setNames(object = x, nm = out)
+  purrr::set_names(x = x, nm = out)
 }
 
 
@@ -25,7 +25,22 @@ widen <- function(x, i = 4) {
     tibble::enframe() |>
     tidyr::pivot_wider() |>
     tidyr::unnest_wider(col = where(~ purrr::pluck_depth(.x) < i), simplify = TRUE, names_sep = '_') |>
-    dplyr::rename_with(.fn = function(x) substr(x, start = 1, stop = nchar(x) - 2), .cols = dplyr::ends_with('_1'))
+    dplyr::rename_with(.fn = function(x) substr(x, start = 1, stop = nchar(x) - 2), .cols = dplyr::ends_with('_1')) |>
+    clean_names()
+}
+
+list_to_row <- function(l) {
+  l |>
+    lapply(function(x) {
+      lapply(x, function(y) {
+        if (length(y) != 1) {
+          list(widen(y))
+        } else {
+          y
+        }
+      }) |>
+        tibble::as_tibble_row()
+    })
 }
 
 list_hoist <- function(l) {
@@ -34,16 +49,44 @@ list_hoist <- function(l) {
 
 validate_user <- function(x) {
   # regex adapted from https://atproto.com/specs/handle#handle-identifier-syntax
+  if (!is.character(x)) {
+    cli::cli_abort('{.arg user} must be a character vector.')
+  }
+  if (length(x) != 1) {
+    cli::cli_abort('{.arg user} must be a single character string.')
+  }
+  if (x == '') {
+    cli::cli_abort(
+      c(
+        x = '{.arg user} is {.val {x}}, the empty string, not a username.',
+        i = 'Add a username using {.fn bs_set_user}.'
+      )
+    )
+  }
   if (!stringr::str_detect(
     x,
     '^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$'
   )) {
-    cli::cli_abort('{.arg user} must be a valid handle.')
+    cli::cli_abort('{.arg user} is {.val {x}}, which is not a valid handle.')
   }
   invisible(x)
 }
 
 validate_pass <- function(x) {
+  if (!is.character(x)) {
+    cli::cli_abort('{.arg pass} must be a character vector.')
+  }
+  if (length(x) != 1) {
+    cli::cli_abort('{.arg pass} must be a single character string.')
+  }
+  if (x == '') {
+    cli::cli_abort(
+      c(
+        x = '{.arg pass} is {.val {x}}, the empty string, not a password.',
+        i = 'Add a password using {.fn bs_set_pass}.'
+      )
+    )
+  }
   if (nchar(x) != 19) {
     cli::cli_abort('{.arg pass} must have 19 characters.')
   }
@@ -125,14 +168,9 @@ replace_emoji <- function(emo) {
   }
 
   emo <- stringr::str_remove_all(emo, ':')
-
   noms <- names(emoji::emoji_name)
 
-  if (emo %in% noms) {
-    emoji::emoji_name[emo]
-  } else {
-    pad_emoji(emo)
-  }
+  ifelse(emo %in% noms, emoji::emoji_name[emo], pad_emoji(emo))
 }
 
 # general helpers ----
@@ -148,7 +186,8 @@ is_online_link <- function(x) {
 # handle blob tibbles ----
 
 blob_tb_to_list <- function(tb) {
-  lapply(seq_len(nrow(tb)),
+  lapply(
+    seq_len(nrow(tb)),
     function(r) {
       list(
         blob = list(
@@ -160,5 +199,6 @@ blob_tb_to_list <- function(tb) {
           size = as.integer(tb[[r, 'size']])
         )
       )
-  })
+    }
+  )
 }

@@ -22,19 +22,24 @@
 #'   'at://did:plc:wpe35pganb6d4pg4ekmfy6u5/app.bsky.graph.starterpack/3lb3g5veo2z2r'
 #' )
 #' bs_get_starter_packs(
-#'   c('at://did:plc:wpe35pganb6d4pg4ekmfy6u5/app.bsky.graph.starterpack/3lb3g5veo2z2r',
-#'   'at://did:plc:bmc56x6ksb7o7sdkq2fgm7se/app.bsky.graph.starterpack/3laywns2q2v27')
+#'   c(
+#'     'at://did:plc:wpe35pganb6d4pg4ekmfy6u5/app.bsky.graph.starterpack/3lb3g5veo2z2r',
+#'     'at://did:plc:bmc56x6ksb7o7sdkq2fgm7se/app.bsky.graph.starterpack/3laywns2q2v27'
+#'   )
 #' )
 bs_get_starter_packs <- function(starter_packs,
-                                user = get_bluesky_user(), pass = get_bluesky_pass(),
-                                auth = bs_auth(user, pass), clean = TRUE) {
-
+                                 user = get_bluesky_user(), pass = get_bluesky_pass(),
+                                 auth = bs_auth(user, pass), clean = TRUE) {
   if (missing(starter_packs)) {
     cli::cli_abort('{.arg starter_pack} must list at least one user.')
   }
   if (!is.character(starter_packs)) {
     cli::cli_abort('{.arg starter_pack} must be a character vector.')
   }
+
+  starter_packs <- purrr::map_chr(starter_packs, function(x) {
+    bs_url_to_uri(x, auth = auth)
+  })
 
   req <- httr2::request('https://bsky.social/xrpc/app.bsky.graph.getStarterPacks')
 
@@ -60,4 +65,3 @@ bs_get_starter_packs <- function(starter_packs,
     add_cursor(resp) |>
     clean_names()
 }
-

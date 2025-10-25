@@ -64,8 +64,10 @@ parse_regex <- function(txt, regex, drop_n = 0L) {
 
   lapply(seq_along(matches), function(m) {
     lapply(seq_len(nrow(matches[[m]])), function(r) {
-      num_byte_prev <- stringr::str_sub(txt, matches[[m]][r, 1, drop = TRUE] - 1,
-                                        matches[[m]][r, 1, drop = TRUE] - 1) |>
+      num_byte_prev <- stringr::str_sub(
+        txt, matches[[m]][r, 1, drop = TRUE] - 1,
+        matches[[m]][r, 1, drop = TRUE] - 1
+      ) |>
         stringi::stri_numbytes()
       list(
         start = ifelse(num_byte_prev == 0, 0, txt_cum_wts[[m]][unname(matches[[m]][r, 1, drop = TRUE])]),
@@ -157,7 +159,8 @@ parse_facets <- function(txt, auth) {
       facet_tags[[i]]
     ) |>
       purrr::discard(is.null) |>
-      purrr::discard(purrr::is_empty)
+      purrr::discard(purrr::is_empty) |>
+      purrr::discard(function(x) is.null(x$index$byteStart) || is.null(x$index$byteEnd))
     if (purrr::is_empty(out)) {
       return(NULL)
     }
@@ -201,7 +204,9 @@ parse_emoji <- function(txt) {
   stringr::str_replace_all(txt, emoji_regex, replace_emoji)
 }
 
-parse_tenor_gif <- function(txt) {
+parse_tenor_gif <- function(txt,
+                            user = get_bluesky_user(), pass = get_bluesky_pass(),
+                            auth = bs_auth(user, pass)) {
   # extract gif from tenor like: https://tenor.com/view/this-is-fine-gif-24177057
   tenor_regex <- 'https://tenor.com/view/[^\\s]+'
   tenor_urls <- stringr::str_extract(txt, tenor_regex)
@@ -249,14 +254,16 @@ parse_tenor_gif <- function(txt) {
     uri = out_url,
     title = og[['title']],
     description = og[['title']],
-    thumb = thumb
+    thumb = thumb,
+    user = user, pass = pass,
+    auth = auth
   )
 }
 
-parse_first_link <- function(txt) {
+parse_first_link <- function(txt, auth) {
   urls <- parse_urls(txt)[[1]]
   if (length(urls) == 0) {
     return(NULL)
   }
-  bs_new_embed_external(urls[[1]]$text)
+  bs_new_embed_external(urls[[1]]$text, auth = auth)
 }
